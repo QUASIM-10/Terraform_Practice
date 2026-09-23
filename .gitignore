@@ -1,0 +1,30 @@
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Provider plugins and module cache
+.terraform/
+.terraform.tfstate.lock.info
+
+# Variable files, these often hold secrets
+*.tfvars
+*.tfvars.json
+!example.tfvars
+
+# Saved plans
+tfplan
+*.tfplan
+crash.log
+crash.*.log
+
+# CLI config that can contain credentials
+.terraformrc
+terraform.rc
+
+# Local notes and output dumps
+plan.txt
+
+# Editor and OS
+.vscode/
+.DS_Store
+Thumbs.db
