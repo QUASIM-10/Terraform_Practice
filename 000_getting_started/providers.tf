@@ -18,13 +18,11 @@ terraform {
 
 provider "aws" {
   # Configuration options
-  profile = "default"
-  region  = "us-east-1"
+  region = "us-east-1"
 
 }
 
 provider "aws" {
-  profile = "default"
-  region  = "eu-west-1"
-  alias   = "eu"
+  region = "eu-west-1"
+  alias  = "eu"
 }
