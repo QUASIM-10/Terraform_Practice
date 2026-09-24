@@ -1,4 +1,13 @@
 terraform {
+
+  backend "remote" {
+    organization = "Quasim_Terraform"
+
+    workspaces {
+      name = "getting_started"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
