@@ -2,12 +2,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.0"
+      version = "6.66.0"
     }
   }
 
   backend "remote" {
-    organization = "QUASIM-10"
+    organization = "Quasim_Terraform"
 
     workspaces {
       name = "provisioners"
@@ -41,7 +41,7 @@ resource "aws_vpc_security_group_ingress_rule" "http" {
 resource "aws_vpc_security_group_ingress_rule" "ssh" {
   security_group_id = aws_security_group.sg_my_server.id
   description       = "SSH"
-  cidr_ipv4         = "102.89.34.31/32"
+  cidr_ipv4         = "102.89.0.0/16" #cidr_ipv4         = "102.89.23.91/32"
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
@@ -64,6 +64,7 @@ resource "aws_instance" "Web_010_Server" {
   instance_type          = "t3.micro"
   key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.sg_my_server.id]
+  user_data              = file("${path.module}/userdata.yaml")
   tags = {
     Name = "Provisioner_Server"
   }
