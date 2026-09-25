@@ -69,6 +69,14 @@ resource "aws_instance" "Web_010_Server" {
   provisioner "local-exec" {
     command = "echo 'Instance ${self.id} has been deployed!' >> deployment_log.txt"
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "puppet apply",
+      "consul join ${aws_instance.web.private_ip}",
+    ]
+  }
+
   tags = {
     Name = "Provisioner_Server"
   }
