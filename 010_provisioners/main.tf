@@ -5,7 +5,7 @@ terraform {
       version = "6.66.0"
     }
   }
-
+  /*
   backend "remote" {
     organization = "Quasim_Terraform"
 
@@ -13,6 +13,7 @@ terraform {
       name = "provisioners"
     }
   }
+*/
 }
 
 provider "aws" {
@@ -65,6 +66,9 @@ resource "aws_instance" "Web_010_Server" {
   key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.sg_my_server.id]
   user_data              = file("${path.module}/userdata.yaml")
+  provisioner "local-exec" {
+    command = "echo 'Instance ${self.id} has been deployed!' >> deployment_log.txt"
+  }
   tags = {
     Name = "Provisioner_Server"
   }

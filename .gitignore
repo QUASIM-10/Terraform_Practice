@@ -6,6 +6,11 @@
 *.key
 id_rsa*
 
+*.tfstate
+*.tfstate.*
+.terraform/
+deployment_log.txt
+
 # Provider plugins and module cache
 .terraform/
 .terraform.tfstate.lock.info
