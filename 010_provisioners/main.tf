@@ -42,7 +42,7 @@ resource "aws_vpc_security_group_ingress_rule" "http" {
 resource "aws_vpc_security_group_ingress_rule" "ssh" {
   security_group_id = aws_security_group.sg_my_server.id
   description       = "SSH"
-  cidr_ipv4         = "102.89.0.0/16" #cidr_ipv4         = "102.89.23.91/32"
+  cidr_ipv4         = "0.0.0.0/0" #"102.89.0.0/16" #cidr_ipv4         = "102.89.23.91/32"
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
@@ -66,15 +66,23 @@ resource "aws_instance" "Web_010_Server" {
   key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.sg_my_server.id]
   user_data              = file("${path.module}/userdata.yaml")
+  /*
   provisioner "local-exec" {
     command = "echo 'Instance ${self.id} has been deployed!' >> deployment_log.txt"
   }
+  */
 
   provisioner "remote-exec" {
     inline = [
-      "puppet apply",
-      "consul join ${aws_instance.web.private_ip}",
+      "echo ${self.private_ip} >> /home/ec2-user/private_ip.txt",
     ]
+
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      host        = self.public_ip
+      private_key = file(pathexpand("~/.ssh/terraform"))
+    }
   }
 
   tags = {
