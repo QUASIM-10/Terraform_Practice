@@ -66,17 +66,34 @@ resource "aws_instance" "Web_010_Server" {
   key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.sg_my_server.id]
   user_data              = file("${path.module}/userdata.yaml")
+
+  # local exec provisioner to log the instance ID to a local file
   /*
   provisioner "local-exec" {
     command = "echo 'Instance ${self.id} has been deployed!' >> deployment_log.txt"
   }
   */
 
+  # remote exec provisioner to log the private IP to a file on the instance
+  /*
   provisioner "remote-exec" {
     inline = [
       "echo ${self.private_ip} >> /home/ec2-user/private_ip.txt",
     ]
 
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      host        = self.public_ip
+      private_key = file(pathexpand("~/.ssh/terraform"))
+    }
+  }
+  */
+
+  # file provisioner to log the private IP to a file on the instance
+  provisioner "file" {
+    content     = "MY NAME IS ADEYANJU QUASIM."
+    destination = "/home/ec2-user/ami_info.txt"
     connection {
       type        = "ssh"
       user        = "ec2-user"
