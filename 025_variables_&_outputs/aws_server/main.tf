@@ -20,7 +20,7 @@ variable "instance_type" {
 }
 
 resource "aws_instance" "Terraform_Web_Server" {
-  ami           = "ami-0b2c9d1f3edcfd709"
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type #"t2.nano" WON'T RUN COS IT IS NOT AVAILABLE FOR FREE PLAN ACCOUNTS.
 
 }
@@ -29,6 +29,24 @@ provider "aws" {
   profile = "default"
   region  = "us-east-1"
 }
+
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
 
 
 output "public_ip" {
