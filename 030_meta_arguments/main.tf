@@ -12,24 +12,18 @@ provider "aws" {
   region  = "us-east-1"
 }
 
-resource "aws_s3_bucket" "bucket" {
-  bucket = "2443402424109-depends-on"
-  depends_on = [
-    aws_instance.Terraform_Web_Server
-  ]
-
+resource "aws_instance" "Terraform_Web_Server" {
+  count         = 3
+  ami           = "ami-0b2c9d1f3edcfd709"
+  instance_type = "t3.micro"
   tags = {
-    Name        = "My bucket"
-    Environment = "Dev"
+    Name = "Server-${count.index + 1}"
   }
 }
 
-resource "aws_instance" "Terraform_Web_Server" {
-  ami           = "ami-0b2c9d1f3edcfd709"
-  instance_type = "t3.micro"
-
-}
-
 output "public_ip" {
-  value = aws_instance.Terraform_Web_Server.public_ip
+  value = aws_instance.Terraform_Web_Server[*].public_ip
 }
+
+# THE FACT THAT THESE FEW LINES WERE ABLE TO DEPLOY THREE INSTANCES OF THE WEB SERVER, EACH WITH A UNIQUE NAME, IS A TESTAMENT TO THE POWER OF TERRAFORM'S COUNT META-ARGUMENT.
+# IT ENABLES USERS TO EASILY SCALE THEIR INFRASTRUCTURE WITHOUT DUPLICATING CODE, MAKING IT A VALUABLE TOOL FOR EFFICIENT AND EFFECTIVE INFRASTRUCTURE MANAGEMENT.
