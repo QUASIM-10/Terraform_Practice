@@ -1,0 +1,62 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.67.0"
+    }
+  }
+}
+
+locals {
+  project      = "Terrafrom-Practice"
+  owner        = "QUASIM"
+  commmon_name = "${local.project}.server"
+  environment  = "Dev_Ops"
+  team         = "COMPUTING"
+}
+
+variable "instance_type" {
+  description = "the instance type being used"
+  type        = string
+}
+
+variable "region" {
+  description = "the region of the instance being deployed"
+  type        = string
+}
+
+variable "ami" {
+  description = "the ami to be used"
+  type        = string
+}
+
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_instance" "Testing_from_scratch" {
+  ami           = var.ami
+  instance_type = var.instance_type
+
+  tags = {
+    Name        = "Testing_skills"
+    Environment = local.environment
+    Team        = local.team
+  }
+}
+
+output "ami_value" {
+  value = aws_instance.Testing_from_scratch.ami
+}
+
+output "public_ip_address" {
+  value = aws_instance.Testing_from_scratch.public_ip
+}
+
+output "private_ip_address" {
+  value = aws_instance.Testing_from_scratch.private_ip
+}
+
+output "instance_id" {
+  value = aws_instance.Testing_from_scratch.id
+}

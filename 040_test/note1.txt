@@ -1,0 +1,37 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.67.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "Testing_from_scratch" {
+  ami           = "ami-07f9c6534b9c70941"
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "Testing_skills"
+  }
+}
+
+output "ami_value" {
+  value = aws_instance.Testing_from_scratch.ami
+}
+
+output "public_ip_address" {
+  value = aws_instance.Testing_from_scratch.public_ip
+}
+
+output "private_ip_address" {
+  value = aws_instance.Testing_from_scratch.private_ip
+}
+
+output "instance_id" {
+  value = aws_instance.Testing_from_scratch.id
+}
